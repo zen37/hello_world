@@ -1,0 +1,7 @@
+{
+    "translation_service": "azure",
+    "speech_service": "azure",
+    "image_service": "azure",
+    "logging_level": "INFO",
+    "logging_format": "%(asctime)s [%(levelname)s]: %(message)s"
+}

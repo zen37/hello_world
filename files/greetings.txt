@@ -1,0 +1,15 @@
+en:Hello World
+fr:Bonjour le monde
+es:¡Hola mundo
+ja:こんにちは、世界
+it:Ciao mondo
+de:Hallo Welt
+pt:Olá, mundo
+no:Hallo verden
+ru:Всем привет
+uk:Привіт, народ
+hu:Helló világ
+fi:Moi maailma
+da:Hej verden
+el:Γεια σου κόσμε
+tr:Merhaba Dünya

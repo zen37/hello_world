@@ -1,0 +1,1 @@
+exact text {greeting} on the image and background related to country with iso code {country_code}
