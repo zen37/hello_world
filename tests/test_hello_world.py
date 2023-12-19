@@ -1,9 +1,11 @@
+import sys
+sys.path.append(".")
+
 import locale
 
-from 1-hello_world.utils import set_locale
+from utils import set_locale
 from text import get_greeting, read_greetings_file, print_greeting
 from constants import FILE_NAME_GREETINGS, SEP, WORLD_EMOJI, ENCODING
-
 
 def test_get_greeting():
     lines = read_greetings_file(FILE_NAME_GREETINGS)
