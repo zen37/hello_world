@@ -7,7 +7,7 @@ import uuid
 import json
 import requests
 
-from utils import get_key_translation
+from utils import get_api_key
 from constants import TIMEOUT_SECONDS
 from translator.interface import TranslatorInterface
 

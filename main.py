@@ -1,7 +1,7 @@
 import sys
 import locale
 
-from utils import configure_logging, load_environment_variables, set_locale, get_country_code, get_prompt_image, tokens_count
+from utils import configure_logging, load_environment_variables, set_locale, get_country_code, get_prompt_image
 from text import get_greeting, print_greeting
 from audio import talk
 from visual import create_image
@@ -12,11 +12,10 @@ def init():
     configure_logging()
     load_environment_variables()
 
-
 def main():
     try:
         init()
-
+        #return
         current_locale = locale.getlocale()
 
         greeting = get_greeting(current_locale)
@@ -30,10 +29,6 @@ def main():
         prompt = prompt_text.format(greeting=greeting, country_code=country_code)
         create_image(country_code, prompt)
 
-    except FileNotFoundError as file_error:
-        print(f"File not found: {file_error}")
-    except (locale.Error, ValueError) as locale_error:
-        print(f"Error with locale or value: {locale_error}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 

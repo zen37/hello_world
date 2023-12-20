@@ -6,7 +6,10 @@ import json
 import inspect
 import tiktoken
 
-from constants import ENCODING, DIR_CONFIG, FILE_COMMON_CONFIG, FILE_PROMPT_IMAGE
+from constants import (
+    ENCODING, DIR_CONFIG, FILE_COMMON_CONFIG, FILE_PROMPT_IMAGE,
+    SERVICES, SERVICE_KEY_MAPPING, TRANSLATION_SERVICE, SPEECH_SERVICE, IMAGE_SERVICE
+)
 
 def set_locale(language, encoding):
     """Set the locale."""
@@ -26,10 +29,25 @@ def log_function_call(func):
     return wrapper
 
 def get_config():
+    """reads common configuration file"""
     config_path = os.path.join(DIR_CONFIG, FILE_COMMON_CONFIG)
-    with open(config_path, "r", encoding = ENCODING) as file:
-        config = json.load(file)
-    return config
+    try:
+        with open(config_path, "r", encoding=ENCODING) as file:
+            config = json.load(file)
+        return config
+    except FileNotFoundError as e:
+        logging.error("Configuration file not found: %s", e)
+        # You might choose to return a default configuration or raise the exception depending on your use case.
+        return {}
+    except json.JSONDecodeError as e:
+        logging.error("Error decoding JSON in configuration file: %s", e)
+        # Handle the error, e.g., return a default configuration or raise the exception.
+        return {}
+    except Exception as e:
+        logging.error("Unexpected error reading configuration file: %s", e)
+        # Handle the error, e.g., return a default configuration or raise the exception.
+        return {}
+
 
 def get_config_service(provider):
     file_config = provider + ".json"
@@ -41,27 +59,39 @@ def get_config_service(provider):
 
     return config
 
+
 def load_environment_variables():
+    """loads environment variables based on the service used for each functionality: text, speech, video"""
     config = get_config()
 
-    services = ["translation_service", "speech_service", "image_service"]
+    for service in SERVICES:
+        service_provider = config.get(service, "")
+        dotenv_path = os.path.join('./env', f'{service_provider.lower()}.env')
+        logging.info('%s uses %s', service, service_provider)
 
-    for service_key in services:
-        service = config.get(service_key, "").lower()
-        secrets_path = os.path.join("env", f"{service}.env")
-        load_dotenv(dotenv_path=secrets_path)
+        try:
+            with open(dotenv_path, encoding=ENCODING) as f:
+                for line in f:
+                    key, value = line.strip().split('=', 1)
+                    if service in SERVICE_KEY_MAPPING and key == SERVICE_KEY_MAPPING[service]:
+                        os.environ[key] = value
 
-def get_key_translation():
-    key = os.getenv("KEY_TRANSLATOR")
+        except FileNotFoundError as e:
+            logging.error("Environment file not found for %s: %s", service, e)
+        except ValueError as e:
+            logging.error("Error processing environment file for %s: %s", service, e)
+        except Exception as e:
+            logging.error("Unexpected error for %s: %s", service, e)
+
+
+#def get_key_image():
+#    key = os.getenv(SERVICE_KEY_MAPPING[IMAGE_SERVICE])
+#    return key
+
+def get_api_key(service):
+    key = os.getenv(SERVICE_KEY_MAPPING[service])
     return key
 
-def get_key_speech():
-    key = os.getenv("KEY_SPEECH")
-    return key
-
-def get_key_image():
-    key = os.getenv("KEY_IMAGE")
-    return key
 
 def get_country_code(language_code):
     components = language_code.split('_')
@@ -82,6 +112,7 @@ def get_prompt_image():
     return prompt_text
 
 def configure_logging():
+    """configures logging based on configuration"""
     config = get_config()
 
     logging.basicConfig(

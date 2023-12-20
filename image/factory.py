@@ -11,7 +11,7 @@ def get_image_instance(config):
         from image.services.azure import AzureImageService
         return AzureImageService(config_service)
     elif service == SERVICE_STABILITY:
-        from image.services.azure import StabilityImageService
+        from image.services.stability import StabilityImageService
         return StabilityImageService(config_service)
     else:
         raise ValueError("Invalid image service specified in the config.")

@@ -10,17 +10,17 @@ import json
 
 from image.interface import ImageInterface
 from constants import (
-    DIR_IMAGES, FORMAT_TIME, FILE_IMAGE_EXT,
+    DIR_IMAGES, FORMAT_TIME, FILE_IMAGE_EXT, IMAGE_SERVICE,
     DEFAULT_IMAGE_QUALITY, DEFAULT_IMAGE_SIZE, DEFAULT_IMAGE_STYLE
 )
-from utils import get_key_image
+from utils import get_api_key
 
 class AzureImageService(ImageInterface):
     def __init__(self, config):
         self.config = config
         self.client = AzureOpenAI(
             api_version=self.config["api_version_image"],
-            api_key=get_key_image(),
+            api_key=get_api_key(IMAGE_SERVICE),
             azure_endpoint=self.config["endpoint_image"],
         )
 
