@@ -8,7 +8,7 @@ import tiktoken
 
 from constants import (
     ENCODING, DIR_CONFIG, FILE_COMMON_CONFIG, FILE_PROMPT_IMAGE,
-    SERVICES, SERVICE_KEY_MAPPING, TRANSLATION_SERVICE, SPEECH_SERVICE, IMAGE_SERVICE
+    SERVICES, SERVICE_KEY_MAPPING
 )
 
 def set_locale(language, encoding):
@@ -83,10 +83,6 @@ def load_environment_variables():
         except Exception as e:
             logging.error("Unexpected error for %s: %s", service, e)
 
-
-#def get_key_image():
-#    key = os.getenv(SERVICE_KEY_MAPPING[IMAGE_SERVICE])
-#    return key
 
 def get_api_key(service):
     key = os.getenv(SERVICE_KEY_MAPPING[service])
